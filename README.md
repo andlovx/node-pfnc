@@ -9,7 +9,7 @@ This [Node.JS](https://nodejs.org) extension uses native platform API and comman
 Use NPM to install this extension.
 
 ```shell
-npm install --save pfnc
+npm install --save @xertified/pfnc
 ```
 
 ## Usage
