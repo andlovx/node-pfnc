@@ -1,6 +1,6 @@
-# Program path using network connection port (PFNC)
+# Program path using network connection (PFNC)
 
-Given a network port, find out which applications are connected against that port. The port can refer to either local or remote side of the network connection.
+Find application connected against a given UDP/TCP port. The port can refer to either local or remote side of the network connection.
 
 This [Node.JS](https://nodejs.org) extension uses native platform API and commands to query the system for relevant information. Windows, MacOS and Linux are the currently supported operating systems.
 

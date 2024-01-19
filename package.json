@@ -1,7 +1,7 @@
 {
   "name": "pfnc",
   "version": "1.0.0",
-  "description": "Path for program using network port (PFNC)",
+  "description": "Path of program using network port (PFNC)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
