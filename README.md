@@ -17,7 +17,7 @@ npm install --save pfnc
 Find all applications connected against remote port 443:
 
 ```javascript
-const pfnc = require("pfnc");
+const pfnc = require("@xertified/pfnc");
 
 const result = pfnc.scan({ port: 443, origin: "local" });
 console.log(result);
@@ -26,7 +26,7 @@ console.log(result);
 Find all applications connected against local port 443:
 
 ```javascript
-const pfnc = require("pfnc");
+const pfnc = require("@xertified/pfnc");
 
 const result = pfnc.scan({ port: 443, origin: "remote" });
 console.log(result);
