@@ -34,7 +34,7 @@
   },
   "license": "MIT",
   "gypfile": true,
-  "dependencies": {
+  "devDependencies": {
     "bindings": "^1.5.0"
   },
   "os": [
