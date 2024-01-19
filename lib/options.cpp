@@ -79,6 +79,8 @@ std::ostream &operator<<(std::ostream &out, const Options &options)
            << "Source:\n"
            << "   Origin: " << options.source.origin << "\n"
            << "     Port: " << options.source.port << "\n"
+           << "Output:\n"
+           << "   Values: " << options.output << "\n"
            << "Runtime:\n"
            << "    Debug: " << options.runtime.debug << "\n"
            << "  Verbose: " << options.runtime.verbose << "\n";
