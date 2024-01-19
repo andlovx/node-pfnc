@@ -38,16 +38,12 @@ struct Options
 
     struct Output
     {
-        OutputFormat format = OutputFormat::Table;
-        struct List
-        {
-            bool origin;
-            bool proto;
-            bool port;
-            bool pid;
-            bool addr;
-            bool path;
-        } list;
+        bool origin;
+        bool proto;
+        bool port;
+        bool pid;
+        bool addr;
+        bool path;
     } output;
 
     struct Runtime

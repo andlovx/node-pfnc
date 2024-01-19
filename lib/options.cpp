@@ -15,13 +15,12 @@ Options::Options()
     source.origin = PortOrigin::Unspec;
     source.port = 0;
 
-    output.format = OutputFormat::Table;
-    output.list.addr = false;
-    output.list.origin = true;
-    output.list.path = true;
-    output.list.pid = true;
-    output.list.port = true;
-    output.list.proto = false;
+    output.addr = false;
+    output.origin = true;
+    output.path = true;
+    output.pid = true;
+    output.port = true;
+    output.proto = false;
 
     runtime.debug = false;
     runtime.verbose = false;
@@ -44,29 +43,29 @@ std::ostream &operator<<(std::ostream &out, const PortOrigin &origin)
     }
 }
 
-std::ostream &operator<<(std::ostream &out, const Options::Output::List &list)
+std::ostream &operator<<(std::ostream &out, const Options::Output &output)
 {
-    if (list.addr)
+    if (output.addr)
     {
         out << "Address ";
     }
-    if (list.origin)
+    if (output.origin)
     {
         out << "Origin ";
     }
-    if (list.path)
+    if (output.path)
     {
         out << "Path ";
     }
-    if (list.pid)
+    if (output.pid)
     {
         out << "PID ";
     }
-    if (list.port)
+    if (output.port)
     {
         out << "Port ";
     }
-    if (list.proto)
+    if (output.proto)
     {
         out << "Proto ";
     }

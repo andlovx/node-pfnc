@@ -96,7 +96,7 @@ namespace PFNC
         Local<Context> context = isolate->GetCurrentContext();
         Local<Object> object = Object::New(isolate);
 
-        if (options.output.list.origin)
+        if (options.output.origin)
         {
             object->Set(context,
                         String::NewFromUtf8(isolate, "origin").ToLocalChecked(),
@@ -105,28 +105,28 @@ namespace PFNC
             {
             }
         }
-        if (options.output.list.proto)
+        if (options.output.proto)
         {
             object->Set(context,
                         String::NewFromUtf8(isolate, "proto").ToLocalChecked(),
                         String::NewFromUtf8(isolate, entry.proto.c_str()).ToLocalChecked())
                 .Check();
         }
-        if (options.output.list.port)
+        if (options.output.port)
         {
             object->Set(context,
                         String::NewFromUtf8(isolate, "port").ToLocalChecked(),
                         Integer::New(isolate, local ? entry.local.port : entry.foreign.port))
                 .Check();
         }
-        if (options.output.list.pid)
+        if (options.output.pid)
         {
             object->Set(context,
                         String::NewFromUtf8(isolate, "pid").ToLocalChecked(),
                         Integer::New(isolate, entry.pid))
                 .Check();
         }
-        if (options.output.list.path)
+        if (options.output.path)
         {
             object->Set(context,
                         String::NewFromUtf8(isolate, "path").ToLocalChecked(),
