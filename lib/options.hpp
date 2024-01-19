@@ -19,13 +19,6 @@ enum class PortOrigin
     Either
 };
 
-enum class OutputFormat
-{
-    Table,
-    JSON,
-    XML
-};
-
 struct Options
 {
     Options();
