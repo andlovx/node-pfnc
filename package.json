@@ -1,0 +1,31 @@
+{
+  "name": "pfnc",
+  "version": "1.0.0",
+  "description": "Path for program using network port (PFNC)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "keywords": [
+    "port",
+    "pid",
+    "path",
+    "filename"
+  ],
+  "author": {
+    "name": "Xertified",
+    "email": "anders.lovgren@xertified.com",
+    "url": "https://xertified.com/"
+  },
+  "license": "MIT",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.5.0"
+  },
+  "os": [
+    "win32",
+    "darwin",
+    "linux"
+  ]
+}
