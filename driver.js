@@ -4,9 +4,26 @@
 
 const pfnc = require("bindings")("pfnc");
 
-const options = {
-  port: 4746,
-  origin: "both",
-};
+console.log(
+  "LOCAL",
+  pfnc.scan({
+    port: 4746,
+    origin: "local",
+  })
+);
 
-console.log(pfnc.scan(options));
+console.log(
+  "REMOTE",
+  pfnc.scan({
+    port: 4746,
+    origin: "remote",
+  })
+);
+
+console.log(
+  "BOTH",
+  pfnc.scan({
+    port: 4746,
+    origin: "both",
+  })
+);
