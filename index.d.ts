@@ -21,9 +21,9 @@ declare module "@xertified/pfnc" {
   };
 
   /**
-   * Result array from scanner.
+   * One network connection (client or server).
    */
-  export type Result = {
+  export type Connection = {
     /**
      * The origin of port information.
      */
@@ -40,7 +40,12 @@ declare module "@xertified/pfnc" {
      * The resolved absolute path of application utilizing the inquired port.
      */
     path: string;
-  }[];
+  };
+
+  /**
+   * Result array from scanner.
+   */
+  export type Result = Connection[];
 
   /**
    * The scanner function. Call this function to get information on related
