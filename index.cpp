@@ -87,10 +87,8 @@ namespace PFNC
         }
     }
 
-    void SetArrayEntry(Local<Array> &array, const Netstat::Entry &entry, const Options &options, bool local)
+    void SetArrayEntry(Local<Array> &array, const Netstat::Entry &entry, const Options &options, bool local, int index)
     {
-        static int index = 0;
-
         Isolate *isolate = Isolate::GetCurrent();
 
         Local<Context> context = isolate->GetCurrentContext();
@@ -134,7 +132,7 @@ namespace PFNC
                 .Check();
         }
 
-        array->Set(context, index++, object).Check();
+        array->Set(context, index, object).Check();
     }
 
     void SetResult(const FunctionCallbackInfo<Value> &args, const Options &options)
@@ -143,8 +141,9 @@ namespace PFNC
 
         Local<Array> array = Array::New(isolate);
 
+        int index = 0;
         Scanner scanner(options);
-        scanner.start([&array, &options](const Netstat::Entry &entry)
+        scanner.start([&array, &options, &index](const Netstat::Entry &entry)
                       { 
                         if (options.runtime.debug)
                         {
@@ -155,13 +154,13 @@ namespace PFNC
                             options.source.origin == PortOrigin::Local ||
                             options.source.origin == PortOrigin::Either))
                         {
-                            SetArrayEntry(array, entry, options, false); 
+                            SetArrayEntry(array, entry, options, false, index++); 
                         }
                         if (options.source.port == entry.foreign.port && (
                             options.source.origin == PortOrigin::Remote ||
                             options.source.origin == PortOrigin::Either))
                         {
-                            SetArrayEntry(array, entry, options, true); 
+                            SetArrayEntry(array, entry, options, true, index++); 
                         } });
 
         args.GetReturnValue().Set(array);
