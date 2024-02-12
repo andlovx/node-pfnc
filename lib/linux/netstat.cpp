@@ -53,7 +53,7 @@ void Netstat::discover(const std::function<void(const Entry &)> callback) const
 
 Buffer::Buffer()
 {
-    regexp = std::regex("(\\w+).*?([.0-9]+):(\\d+)\\s+([.0-9]+):(\\d+).*?(\\d+)/(\\w+)");
+    regexp = std::regex("(\\w+).*?([.0-9]+):(\\d+)\\s+([.0-9]+):(\\d+).*?(\\d+)\\/(\\w+)");
 }
 
 bool Buffer::populate(Netstat::Entry &entry)
