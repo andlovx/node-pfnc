@@ -19,6 +19,7 @@ namespace PFNC
     using v8::Local;
     using v8::Object;
     using v8::String;
+    using v8::Template;
     using v8::Value;
 
     void SetOptions(const FunctionCallbackInfo<Value> &args, Options &options)
@@ -190,10 +191,10 @@ namespace PFNC
         SetResult(args, options);
     }
 
-    void Initialize(Local<Object> exports)
+    void Initialize(Local<Object> exports, Local<Value>, void *)
     {
         NODE_SET_METHOD(exports, "scan", Scan);
     }
 
-    NODE_MODULE(module_name, Initialize)
+    NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
 }
