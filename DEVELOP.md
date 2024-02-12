@@ -12,10 +12,17 @@ npm run install
 
 ## Testing
 
-The file `index.js` can be used for testing from command line.
+Start a netcat server and client (in different terminals).
 
 ```shell
-node index.js
+nc -v -l localhost 4746     # server
+nc -v -d localhost 4746     # client
+```
+
+The file `driver.js` can be used for testing from command line.
+
+```shell
+node driver.js
 ```
 
 ## Debugging
@@ -26,7 +33,7 @@ Install segfault handler for generating stack traces if the native code crashes.
 npm install segfault-handler
 ```
 
-Register a handler in the test driver `index.js`:
+Register a handler in the test driver `driver.js`:
 
 ```javascript
 const SegfaultHandler = require("segfault-handler");
