@@ -8,6 +8,7 @@
 #ifndef OPTIONS_HPP
 #define OPTIONS_HPP
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 

@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <limits.h>
+#include <sstream>
 
 #include "process.hpp"
 #include "error.hpp"

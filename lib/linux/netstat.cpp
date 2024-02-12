@@ -7,6 +7,8 @@
 
 #include <regex>
 #include <iostream>
+#include <cstdio>
+#include <array>
 
 #include "netstat.hpp"
 #include "process.hpp"
