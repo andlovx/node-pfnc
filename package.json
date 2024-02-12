@@ -41,5 +41,8 @@
     "win32",
     "darwin",
     "linux"
-  ]
+  ],
+  "engines": {
+    "node": ">12.22.12"
+  }
 }
