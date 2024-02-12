@@ -6,6 +6,9 @@
       'include_dirs': [
         'lib',
       ],
+      'cflags_cc': [
+        '-std=c++17'
+      ],
       'conditions': [
         ['OS=="win"', {
             'sources': ['lib/win32/netstat.cpp', 'lib/win32/syserr.cpp', 'lib/win32/winproc.cpp'],
