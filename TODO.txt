@@ -1,0 +1,3 @@
+1. Suppress error messages from node-pfnc on Windows.
+2. Output filtering in node-pfnc. Return i.e. network addresses too.
+3. Extract state from netstat information.
