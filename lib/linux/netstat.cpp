@@ -55,7 +55,7 @@ void Netstat::discover(const std::function<void(const Entry &)> callback) const
 
 Buffer::Buffer()
 {
-    regexp = std::regex("(\\w+).*?([.0-9]+):(\\d+)\\s+([.0-9]+):(\\d+).*?(\\d+)\\/(\\w+)");
+    regexp = std::regex("(tcp[4,6]*|udp[4,6]*).*?([\\.0-9]+|[0-9a-f:%]+)\\:(\\d+|\\*)\\s+([\\.0-9]+|[0-9a-f:%]+)\\:(\\d+|\\*)\\s+([A-Z0-9]+)\\s+(\\d+)\\/(\\w+)");
 }
 
 bool Buffer::populate(Netstat::Entry &entry)
@@ -67,9 +67,9 @@ bool Buffer::populate(Netstat::Entry &entry)
     {
         return false;
     }
-    if (matches.size() != 8)
+    if (matches.size() != 9)
     {
-        std::cerr << "Expected 8 matches, got " << matches.size() << std::endl;
+        std::cerr << "Expected 9 matches, got " << matches.size() << std::endl;
         return false;
     }
 
@@ -78,8 +78,8 @@ bool Buffer::populate(Netstat::Entry &entry)
     entry.local.port = atoi(matches[3].str().c_str());
     entry.foreign.addr = matches[4];
     entry.foreign.port = atoi(matches[5].str().c_str());
-    entry.pid = atoi(matches[6].str().c_str());
-    entry.program = matches[7];
+    entry.pid = atoi(matches[7].str().c_str());
+    entry.program = matches[8];
 
     if (entry.pid)
     {
