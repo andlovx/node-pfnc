@@ -29,8 +29,12 @@ public:
     void write(const char *reason);
     void write(const char *reason, int pid);
 
+    void suppress();
+    void restore();
+
 private:
     bool _silent;
+    bool _ssaved;
 };
 
 struct SystemError

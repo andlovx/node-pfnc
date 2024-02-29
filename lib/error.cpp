@@ -8,6 +8,14 @@
 #include <iostream>
 #include "error.hpp"
 
+namespace
+{
+    bool isVerbose()
+    {
+        return getenv("PFNC_VERBOSE") != nullptr && std::string(getenv("PFNC_VERBOSE")) == "1";
+    }
+}
+
 std::ostream &operator<<(std::ostream &out, const SystemError &err)
 {
     return out << err.message << " (" << err.code << ")";
@@ -41,4 +49,15 @@ void ErrorLogger::write(const char *reason, int pid)
         std::cerr << reason << " (" << pid << ")"
                   << ": " << SystemError() << std::endl;
     }
+}
+
+void ErrorLogger::suppress()
+{
+    _ssaved = _silent;
+    _silent = !isVerbose();
+}
+
+void ErrorLogger::restore()
+{
+    _silent = _ssaved;
 }

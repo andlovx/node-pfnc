@@ -103,7 +103,9 @@ bool ProcessReader::set_filename1(int pid)
     processHandle = OpenProcess(dwDesiredAccess, FALSE, pid);
     if (!processHandle)
     {
+        error.suppress();
         error.write("Failed open process", pid);
+        error.restore();
         return false;
     }
 
