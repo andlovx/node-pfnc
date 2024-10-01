@@ -41,3 +41,12 @@ SegfaultHandler.registerHandler("crash.log");
 ```
 
 Another option is to build the extension with debugging symbols and then run node under i.e. gdb.
+
+## Publish
+
+Increase version number and publish new release to NPM.
+
+```shell
+npm version patch
+npm publish
+```
