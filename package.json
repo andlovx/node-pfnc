@@ -1,6 +1,6 @@
 {
   "name": "@xertified/pfnc",
-  "version": "1.0.7",
+  "version": "1.0.10",
   "description": "Path of program using network port (PFNC)",
   "repository": {
     "type": "git",

@@ -67,4 +67,4 @@ The result is an array of objects, where each object contains at least the `orig
 
 ## Environment
 
-Set `PFNC_VERBOSE=1` for more verbose error reporting. Notice that Windows restricts opening certain processes even when using the `SYSTEM` account that are suppressed by default.
+Set `PFNC_VERBOSE=1` for more verbose error reporting. Notice that Windows restricts opening certain processes even when using the `SYSTEM` account. Display of these error messages can be enabled by setting this environment variable.
