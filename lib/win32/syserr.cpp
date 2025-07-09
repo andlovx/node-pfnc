@@ -11,7 +11,7 @@ SystemError::SystemError() : SystemError(GetLastError())
 {
 }
 
-SystemError::SystemError(DWORD code) : code(code), message('\0')
+SystemError::SystemError(DWORD code) : code(code), message(0)
 {
     DWORD dwFlags = FORMAT_MESSAGE_FROM_SYSTEM |
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
