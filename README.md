@@ -1,8 +1,10 @@
 # Program path using network connection (PFNC)
 
-Find application connected against a given UDP/TCP port. The port can refer to either local or remote side of the network connection.
+Find which application is connected against a given UDP/TCP port. The port can refer to either local or remote side of the network connection.
 
-This [Node.JS](https://nodejs.org) extension uses native platform API and commands to query the system for relevant information. Windows, MacOS and Linux are the currently supported operating systems.
+In some security related situations a requirement can be to restrict socket connections based on connected peer program. This library can be used to ensure only trusted programs can establish a network connection.
+
+This [Node.JS](https://nodejs.org) extension uses native platform API and commands to query the system for relevant information. Supported operating systems are Windows, MacOS and Linux.
 
 ## Install
 
@@ -38,7 +40,7 @@ Parameter for scan() function is a object containing the port and origin of netw
 
 ## Result
 
-The result is an array of objects, where each object contains at least the `origin`, `port`, `pid` and `path`. This node extension uses platform API calls to resolve the absolute path from the PID associated with the network connection.
+The result is an array of objects, where each object contains `origin`, `port`, `pid` and `path`. This node extension uses platform API calls to resolve the absolute path from the PID associated with the network connection.
 
 ### Example
 
