@@ -25,13 +25,28 @@ The file `driver.js` can be used for testing from command line.
 node driver.js
 ```
 
+The output should something look like this:
+
+````shell
+node driver.js
+LOCAL [
+  { origin: 'server', port: 50563, pid: 25632, path: '/usr/bin/nc' },
+  { origin: 'server', port: 0, pid: 25632, path: '/usr/bin/nc' }
+]
+REMOTE [ { origin: 'client', port: 50563, pid: 25638, path: '/usr/bin/nc' } ]
+BOTH [
+  { origin: 'server', port: 50563, pid: 25632, path: '/usr/bin/nc' },
+  { origin: 'client', port: 50563, pid: 25638, path: '/usr/bin/nc' },
+  { origin: 'server', port: 0, pid: 25632, path: '/usr/bin/nc' }
+]```
+
 ## Debugging
 
 Install segfault handler for generating stack traces if the native code crashes.
 
 ```shell
 npm install segfault-handler
-```
+````
 
 Register a handler in the test driver `driver.js`:
 
