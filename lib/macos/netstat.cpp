@@ -44,7 +44,8 @@ namespace
             {
                 Unknown,
                 MacOS14,
-                MacOS15
+                MacOS15,
+                MacOS26
             };
 
             Header(const Buffer &buffer);
@@ -58,6 +59,7 @@ namespace
             void setFormat(const std::string &header);
             bool isFormat14(const std::string &header) const;
             bool isFormat15(const std::string &header) const;
+            bool isFormat26(const std::string &header) const;
             bool isMatched(const std::string &header, const std::regex &regex, std::smatch matches = std::smatch()) const;
 
             Format format;
@@ -94,6 +96,8 @@ namespace
             return Format::MacOS14;
         } else if (isFormat15(header)) {
             return Format::MacOS15;
+        } else if(isFormat26(header)) {
+            return Format::MacOS26;
         } else {
             return Format::Unknown;
         }
@@ -112,6 +116,11 @@ namespace
     bool Header::isFormat15(const std::string &header) const 
     {
         return isMatched(header, std::regex("Proto\\s+Recv-Q\\s+Send-Q\\s+Local Address\\s+Foreign Address\\s+\\(state\\)\\s+rxbytes\\s+txbytes\\s+rhiwat\\s+shiwat\\s+(pid)\\s+epid\\s+state\\s+options\\s+gencnt\\s+flags\\s+flags1\\s+usecnt\\s+rtncnt\\s+fltrs\n"));
+    }
+
+    bool Header::isFormat26(const std::string &header) const 
+    {
+        return isMatched(header, std::regex("Proto\\s+Recv-Q\\s+Send-Q\\s+Local Address\\s+Foreign Address\\s+\\(state\\)\\s+rxbytes\\s+txbytes\\s+rhiwat\\s+shiwat\\s+process:pid\\s+state\\s+options\\s+gencnt\\s+flags\\s+flags1\\s+usecnt\\s+rtncnt\\s+fltrs\n"));
     }
 
     bool Header::isMatched(const std::string &header, const std::regex &pattern, std::smatch matches) const 
@@ -161,6 +170,9 @@ namespace
             break;
         case Header::Format::MacOS15:
             regexp = std::regex("(tcp[4,6]|udp[4,6]).*?([\\.0-9]+|[0-9a-f:%]+|\\*)\\.(\\d+|\\*)\\s+([\\.0-9]+|[0-9a-f:%]+|\\*)\\.(\\d+|\\*)\\s+(\\w+)\\s+(\\d+\\s+){4}\\s+(\\d+)");
+            break;
+        case Header::Format::MacOS26:
+            regexp = std::regex("(tcp[4,6]|udp[4,6]).*?([\\.0-9]+|[0-9a-f:%]+|\\*)\\.(\\d+|\\*)\\s+([\\.0-9]+|[0-9a-f:%]+|\\*)\\.(\\d+|\\*)\\s+(\\w+)\\s+(\\d+\\s+){4}\\s+[\\w\\s]+:(\\d+)");
             break;
         case Header::Format::Unknown:
         default:
