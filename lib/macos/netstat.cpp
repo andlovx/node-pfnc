@@ -43,9 +43,11 @@ namespace
             enum class Format
             {
                 Unknown,
-                MacOS14,
-                MacOS15,
-                MacOS26
+                MacOS12,    // Monterey (2021)
+                MacOS13,    // Ventura (2022)
+                MacOS14,    // Sonoma (2023)
+                MacOS15,    // Sequoia (2024)
+                MacOS26     // Tahoe (2025)
             };
 
             Header(const Buffer &buffer);
@@ -57,6 +59,8 @@ namespace
 
         private:
             void setFormat(const std::string &header);
+            bool isFormat12(const std::string &header) const;
+            bool isFormat13(const std::string &header) const;
             bool isFormat14(const std::string &header) const;
             bool isFormat15(const std::string &header) const;
             bool isFormat26(const std::string &header) const;
@@ -92,12 +96,16 @@ namespace
 
     Header::Format Header::getFormat(const std::string &header) const
     {
-        if (isFormat14(header)) {
-            return Format::MacOS14;
+        if (isFormat26(header)) {
+            return Format::MacOS26;
         } else if (isFormat15(header)) {
             return Format::MacOS15;
-        } else if(isFormat26(header)) {
-            return Format::MacOS26;
+        } else if (isFormat14(header)) {
+            return Format::MacOS14;
+        } else if (isFormat13(header)) {
+            return Format::MacOS13;
+        } else if (isFormat12(header)) {
+            return Format::MacOS12;
         } else {
             return Format::Unknown;
         }
@@ -106,6 +114,16 @@ namespace
     void Header::setFormat(const std::string &header)
     {
         format = getFormat(header);
+    }
+
+    bool Header::isFormat12(const std::string &header) const
+    {
+        return isMatched(header, std::regex("Proto\\s+Recv-Q\\s+Send-Q\\s+Local Address\\s+Foreign Address\\s+\\(state\\)\\s+rhiwat\\s+shiwat\\s+(pid)\\s+epid\\s+state\\s+options\n"));
+    }
+
+    bool Header::isFormat13(const std::string &header) const
+    {
+        return isMatched(header, std::regex("Proto\\s+Recv-Q\\s+Send-Q\\s+Local Address\\s+Foreign Address\\s+\\(state\\)\\s+rhiwat\\s+shiwat\\s+(pid)\\s+epid\\s+state\\s+options\\s+gencnt\\s+flags\\s+flags1\\s+usscnt\\s+rtncnt\\s+fltrs\n"));
     }
 
     bool Header::isFormat14(const std::string &header) const
@@ -165,6 +183,8 @@ namespace
 
         switch (match.getFormat())
         {
+        case Header::Format::MacOS12:
+        case Header::Format::MacOS13:
         case Header::Format::MacOS14:
             regexp = std::regex("(tcp[4,6]|udp[4,6]).*?([\\.0-9]+|[0-9a-f:%]+|\\*)\\.(\\d+|\\*)\\s+([\\.0-9]+|[0-9a-f:%]+|\\*)\\.(\\d+|\\*)\\s+(\\w+)\\s+(\\d+\\s+){2}\\s+(\\d+)");
             break;
