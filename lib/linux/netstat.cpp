@@ -27,7 +27,7 @@ namespace
         FILE *handle;
     };
 
-    class Buffer : public std::array<char, 128>
+    class Buffer : public std::array<char, 256>
     {
     public:
         Buffer();

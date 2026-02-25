@@ -27,7 +27,7 @@ namespace
         FILE *handle;
     };
 
-    class Buffer : public std::array<char, 256>
+    class Buffer : public std::array<char, 512>
     {
     public:
         bool populate(Netstat::Entry &);
