@@ -4,7 +4,7 @@
   "description": "Path of program using network port (PFNC)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andlovx/node-pfnc.git"
+    "url": "git+https://github.com/andlovx/node-pfnc.git"
   },
   "main": "index.js",
   "types": "index.d.ts",
