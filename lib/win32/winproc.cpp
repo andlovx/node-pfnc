@@ -6,7 +6,6 @@
 // --------------------------------------------------------
 
 #include <windows.h>
-#include <psapi.h>
 #include <tchar.h>
 #include <tlhelp32.h>
 #include <shlwapi.h>
@@ -16,36 +15,6 @@
 #include "error.hpp"
 
 #pragma warning(disable : 4244)
-
-namespace
-{
-    bool EnableDebugPrivilege(bool bEnable)
-    {
-        HANDLE hToken = nullptr;
-        LUID luid;
-
-        if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken))
-        {
-            return false;
-        }
-        if (!LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &luid))
-        {
-            return false;
-        }
-
-        TOKEN_PRIVILEGES tokenPriv;
-        tokenPriv.PrivilegeCount = 1;
-        tokenPriv.Privileges[0].Luid = luid;
-        tokenPriv.Privileges[0].Attributes = bEnable ? SE_PRIVILEGE_ENABLED : 0;
-
-        if (!AdjustTokenPrivileges(hToken, FALSE, &tokenPriv, sizeof(TOKEN_PRIVILEGES), NULL, NULL))
-        {
-            return false;
-        }
-
-        return true;
-    }
-}
 
 class ProcessReader
 {
@@ -79,26 +48,17 @@ ProcessReader::~ProcessReader()
 
 void ProcessReader::set_filename(int pid)
 {
-    EnableDebugPrivilege(true);
-
     if (set_filename1(pid))
     {
-        EnableDebugPrivilege(false);
         return;
     }
-    if (set_filename2(pid))
-    {
-        EnableDebugPrivilege(false);
-        return;
-    }
-
-    EnableDebugPrivilege(false);
+    set_filename2(pid);
 }
 
 bool ProcessReader::set_filename1(int pid)
 {
     ErrorLogger error(false);
-    DWORD dwDesiredAccess = PROCESS_QUERY_INFORMATION | PROCESS_VM_READ;
+    DWORD dwDesiredAccess = PROCESS_QUERY_LIMITED_INFORMATION;
 
     processHandle = OpenProcess(dwDesiredAccess, FALSE, pid);
     if (!processHandle)
@@ -109,9 +69,10 @@ bool ProcessReader::set_filename1(int pid)
         return false;
     }
 
-    if (GetModuleFileNameEx(processHandle, NULL, filename, MAX_PATH) == 0)
+    DWORD size = MAX_PATH;
+    if (!QueryFullProcessImageName(processHandle, 0, filename, &size))
     {
-        error.write("Failed to get module filename");
+        error.write("Failed to get process image name");
         return false;
     }
 
