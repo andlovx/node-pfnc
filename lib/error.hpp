@@ -13,7 +13,7 @@
 #if PLATFORM_WINDOWS
 #include <windows.h>
 typedef DWORD ErrorCode;
-typedef LPTSTR ErrorString;
+typedef LPSTR ErrorString;
 #else
 typedef int ErrorCode;
 typedef const char *ErrorString;

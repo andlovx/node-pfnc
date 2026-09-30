@@ -6,44 +6,39 @@
 // --------------------------------------------------------
 
 #include <windows.h>
-#include <tchar.h>
 #include <tlhelp32.h>
 #include <shlwapi.h>
 #include <iostream>
+#include <vector>
 
 #include "process.hpp"
 #include "error.hpp"
 
 #pragma warning(disable : 4244)
 
+//
+// Always use the wide character (W) version of the Windows API so that paths
+// containing non-ASCII characters (i.e. Chinese or Hindi) are preserved. The
+// path is converted to UTF-8 when returned from Process::get_filepath().
+//
+
 class ProcessReader
 {
 public:
     ProcessReader();
-    ~ProcessReader();
 
     void set_filename(int pid);
-    std::string get_filename() const;
+    const std::wstring &get_filename() const;
 
 private:
     bool set_filename1(int pid);
     bool set_filename2(int pid);
 
-    HANDLE processHandle;
-    TCHAR filename[MAX_PATH];
+    std::wstring filename;
 };
 
-ProcessReader::ProcessReader() : processHandle(nullptr)
+ProcessReader::ProcessReader()
 {
-    memset(filename, 0, sizeof(filename));
-}
-
-ProcessReader::~ProcessReader()
-{
-    if (processHandle)
-    {
-        CloseHandle(processHandle);
-    }
 }
 
 void ProcessReader::set_filename(int pid)
@@ -60,7 +55,7 @@ bool ProcessReader::set_filename1(int pid)
     ErrorLogger error(false);
     DWORD dwDesiredAccess = PROCESS_QUERY_LIMITED_INFORMATION;
 
-    processHandle = OpenProcess(dwDesiredAccess, FALSE, pid);
+    HANDLE processHandle = OpenProcess(dwDesiredAccess, FALSE, pid);
     if (!processHandle)
     {
         error.suppress();
@@ -69,30 +64,38 @@ bool ProcessReader::set_filename1(int pid)
         return false;
     }
 
-    DWORD size = MAX_PATH;
-    if (!QueryFullProcessImageName(processHandle, 0, filename, &size))
+    //
+    // Use buffer large enough for extended-length paths (not limited to MAX_PATH).
+    //
+    std::vector<wchar_t> buffer(32768);
+    DWORD size = static_cast<DWORD>(buffer.size());
+
+    if (!QueryFullProcessImageNameW(processHandle, 0, buffer.data(), &size))
     {
         error.write("Failed to get process image name");
+        CloseHandle(processHandle);
         return false;
     }
 
+    CloseHandle(processHandle);
+    filename.assign(buffer.data(), size);
     return true;
 }
 
 bool ProcessReader::set_filename2(int pid)
 {
     ErrorLogger error(false);
-    PROCESSENTRY32 pe32;
+    PROCESSENTRY32W pe32;
     pe32.dwSize = sizeof(pe32);
 
-    processHandle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (processHandle == INVALID_HANDLE_VALUE)
+    HANDLE snapshotHandle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (snapshotHandle == INVALID_HANDLE_VALUE)
     {
         error.write("Could not open process snapshot");
         return false;
     }
 
-    BOOL bResult = Process32First(processHandle, &pe32);
+    BOOL bResult = Process32FirstW(snapshotHandle, &pe32);
     if (!bResult)
     {
         error.write("Could not open first snapshot");
@@ -100,35 +103,27 @@ bool ProcessReader::set_filename2(int pid)
 
     while (bResult)
     {
-        if (pe32.th32ProcessID == pid)
+        if (pe32.th32ProcessID == static_cast<DWORD>(pid))
         {
             //
             // The filename's returned is just the filename without any path. Use
             // PathFindOnPath() to search for the binary in standard location such as
             // the system map and all directories in the PATH.
             //
-            PathFindOnPath(pe32.szExeFile, 0);
-            memcpy(filename, pe32.szExeFile, MAX_PATH);
+            PathFindOnPathW(pe32.szExeFile, 0);
+            filename.assign(pe32.szExeFile);
             break;
         }
-        bResult = Process32Next(processHandle, &pe32);
+        bResult = Process32NextW(snapshotHandle, &pe32);
     }
 
+    CloseHandle(snapshotHandle);
     return true;
 }
 
-std::string ProcessReader::get_filename() const
+const std::wstring &ProcessReader::get_filename() const
 {
-    std::string result;
-
-#ifndef UNICODE
-    result = filename;
-#else
-    std::wstring ff(filename);
-    result = std::string(ff.begin(), ff.end());
-#endif
-
-    return result;
+    return filename;
 }
 
 void Process::set_path(int pid)
